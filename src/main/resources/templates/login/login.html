@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>ログイン</title>
+    </head>
+    <body>
+        <div th:if="${param.error}">
+            ユーザー名またはパスワードに誤りがあります
+        </div>
+        <div th:if="${param.logout}">
+            ログアウトしました
+        </div>
+        <form th:action="@{/login}" method=post>
+            <div><label> ユーザー名：<input type="text" name="username"/></label></div>
+            <div><label> パスワード：<input type="password" name="password"/></label></div>
+            <div><input type="submit" value="ログイン"/></div>
+        </form>
+    </body>
+</html>
