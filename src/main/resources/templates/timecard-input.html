@@ -3,11 +3,31 @@
   <head>
     <title>勤怠入力画面</title>
     <meta charset="utf-8" />
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
   </head>
   <body>
     <h1>勤怠入力画面</h1>
     <form th:action="@{/timecard-input}" method="post">
-      <div>
+      <div th:object="${timecardInputData}">
+      <p>インピタス五郎</p>
+        <table>
+          <!-- 中身 -->
+          <th:block th:each="item, stat : *{kintaiDtoList}">
+	          <tr>
+	            <td th:text="|${item.hizuke}${item.youbi}|"></td>
+	            <td>
+	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInput();"
+	                th:field="*{kintaiDtoList[__${stat.index}__].gozen}" readonly>
+	              <span>&nbsp;～</span>
+	            </td>
+	            <td>
+	              <input type="text" size="5" style="cursor:pointer;"
+	                th:field="*{kintaiDtoList[__${stat.index}__].gogo}" readonly>
+	            </td>
+	          </tr>
+          </th:block>
+        </table>
+
         <p>時分入力サンプル</p>
         <input type="time" id="birthdate" class="form-control margin-bottom-20"
           th:field="${timecardInputData.dateFrom}"> ～
@@ -17,5 +37,6 @@
       <button>キャンセル</button>
       <input type="submit" value="送信">
     </form>
+    <script th:src="@{../js/timecard-input.js}"></script>
   </body>
 </html>
