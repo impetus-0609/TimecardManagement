@@ -9,7 +9,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    	http.formLogin().loginPage("/login").defaultSuccessUrl("/inpg01").failureUrl("/login-error").permitAll();
+    	http.formLogin().loginPage("/login").defaultSuccessUrl("/timecard-input/init").failureUrl("/login-error").permitAll();
     	http.authorizeRequests().antMatchers("/css/**", "/images/**", "/js/**").permitAll().anyRequest().authenticated();
     }
 }
