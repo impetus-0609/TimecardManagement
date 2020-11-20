@@ -9,6 +9,7 @@
 .classpath
 mvnw
 test
+.mvn/
 .settings/
 *.md
 *.cmd
