@@ -17,7 +17,7 @@ public class LoginController {
 	@RequestMapping("/login")
 	public String login() {
 		SampleSqlDto dto1 = mapper.select("1");
-//		SampleSqlDto dto2 = xmlVersionMapper.select("1");
+		SampleSqlDto dto2 = xmlVersionMapper.select("1");
 		return "login"; // login.htmlを表示
 	}
 }
