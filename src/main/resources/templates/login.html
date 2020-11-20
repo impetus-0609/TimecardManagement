@@ -1,0 +1,24 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impetus</title>
+  <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="box">
+   <h1>インピタスのログインページです</h1>
+   <form role="form" id="login" th:action="@{/login}" method="post">
+        <div th:if="${iserror}" style="color:red;">
+            <p>ログインできませんでした。やりなおしてください。</p>
+        </div>
+        <p>ユーザID</p>
+        <input type="text" id="username" name="username" autofocus="autofocus" />
+        <p>パスワード</p>
+        <input type="password" id="password" name="password" /><br/>
+        <button type="submit">ログイン</button>
+   </form>
+</div>
+</body>
+</html>
