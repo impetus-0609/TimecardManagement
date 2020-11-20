@@ -1,5 +1,6 @@
 package com.tcm.controller.timecardinput;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,7 @@ public class TimecardInputController {
 	@Autowired SampleKintaiMapper mapper;
 
 	@RequestMapping(value = ACTION_PATH_INIT, method = RequestMethod.GET)
-	public ModelAndView init() {
+	public ModelAndView init() throws ParseException {
 		// 初期表示用の情報を取得 ユーザ情報を基に勤怠情報を取得.
 		// サービス呼び出し var DTO = service.hogehoge
 		// 取得データを画面用DTOに詰め替える
@@ -38,8 +39,14 @@ public class TimecardInputController {
 		// 表示確認用に値詰め替え
 		form.setKintaiDtoList(createTmpKintaiDtoList());
 
-		// サンプル DBから値取得
-		SampleKintaiSqlDto test = mapper.select();
+		// ------ ここからサービスに切り出してください -----
+		// 表示対象の年月設定 実装に際して適切な形にしてください.
+		String targetMonth = "202011";
+		// サンプル DBから値取得 便宜上対象年月は文字列で一旦渡している
+		// 取得されたリストをもとに画面へバインディングする変換処理を作成してください.
+		List<SampleKintaiSqlDto> test = mapper.select("1234", targetMonth);
+
+		// ------------------------------------------------
 		return createModelAndView(form);
 	}
 
