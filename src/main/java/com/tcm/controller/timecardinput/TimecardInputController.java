@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcm.dto.timecardinput.SampleKintaiSqlDto;
 import com.tcm.form.timecardinput.TimecardInputForm;
 import com.tcm.form.timecardinput.sampleKitaiDto;
+import com.tcm.repository.SampleKintaiMapper;
 
 @Controller
 @RequestMapping("/timecard-input")
@@ -24,6 +27,8 @@ public class TimecardInputController {
 	/** 更新処理. */
 	private static final String ACTION_PATH_UPDATE = "update";
 
+	@Autowired SampleKintaiMapper mapper;
+
 	@RequestMapping(value = ACTION_PATH_INIT, method = RequestMethod.GET)
 	public ModelAndView init() {
 		// 初期表示用の情報を取得 ユーザ情報を基に勤怠情報を取得.
@@ -33,6 +38,8 @@ public class TimecardInputController {
 		// 表示確認用に値詰め替え
 		form.setKintaiDtoList(createTmpKintaiDtoList());
 
+		// サンプル DBから値取得
+		SampleKintaiSqlDto test = mapper.select();
 		return createModelAndView(form);
 	}
 
