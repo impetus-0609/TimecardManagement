@@ -1,6 +1,10 @@
 spring:
   datasource:
-    url:  jdbc:postgresql://localhost/sbdb
-    username: XXXX
-    password: XXXX
+    url:  jdbc:postgresql://localhost:5432/impetus
+    username: postgres
+    password: postgres
     driverClassName: org.postgresql.Driver
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
