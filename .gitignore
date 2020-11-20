@@ -19,12 +19,8 @@
 Thumbs.db
 .DS_Store
 
-# Gradle
-.gradle
-!gradle-wrapper.jar
-
 # Maven
-target
+target/
 
 # Build
 out
