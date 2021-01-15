@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class sampleKitaiDto {
+	/** 年月. */
+	private String nen;
 	/** 日付. */
 	private String hizuke;
 	/** 曜日. */
