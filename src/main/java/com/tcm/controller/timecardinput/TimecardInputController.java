@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcm.dto.sample.SampleSqlDto;
 import com.tcm.form.timecardinput.TimecardInputForm;
 import com.tcm.form.timecardinput.sampleKitaiDto;
 import com.tcm.repository.SampleKintaiMapper;
@@ -95,5 +96,11 @@ public class TimecardInputController {
 		r.setViewName(TIMECARD_INPUT_HTML);
 		r.addObject(TIMECARD_INPUT_DATA, form);
 		return r;
+	}
+	
+	@RequestMapping("/timecard-input/modal")
+	public String modal() {
+		System.out.print("OK");
+		return "timecard-input"; // timecard-input.htmlを表示
 	}
 }

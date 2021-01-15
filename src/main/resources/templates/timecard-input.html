@@ -34,24 +34,26 @@
         </table>
       </div>
       <button>キャンセル</button>
-      <div id="modal" class="modal">
-		  <div class="modal-content">
-			    <div class="modal-body">
-			      <h1>モーダル画面</h1>
-			      <div id="test1"></div>
-			      <div id="test2"></div>
-			      <p>時分入力サンプル</p>
-			        <input type="time" id="birthdate" class="form-control margin-bottom-20"
-			          th:field="${timecardInputData.dateFrom}"> ～
-			        <input type="time" id="birthdate" class="form-control margin-bottom-20"
-			          th:field="${timecardInputData.dateTo}">
-			      <input type="button" value="OK">
-			      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();"> 
-			    </div>
-			</div>
-		</div>
       <input type="submit" value="送信">
     </form>
+    	    <div id="modal" class="modal">
+			  <div class="modal-content">
+				  <form th:action="@{/timecard-input/modal}" method="post">
+					    <div class="modal-body">
+					      <h1>モーダル画面</h1>
+					      <div id="test1"></div>
+					      <div id="test2"></div>
+					      <p>時分入力サンプル</p>
+					        <input type="time" id="birthdate" class="form-control margin-bottom-20"
+					          th:field="${timecardInputData.dateFrom}"> ～
+					        <input type="time" id="birthdate" class="form-control margin-bottom-20"
+					          th:field="${timecardInputData.dateTo}">
+					      <input type="submit" value="OK">
+					      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();"> 
+					    </div>
+					</form>
+				</div>
+			</div>
     <script th:src="@{../js/timecard-input.js}"></script>
   </body>
 </html>
