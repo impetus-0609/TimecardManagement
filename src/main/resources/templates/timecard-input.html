@@ -18,10 +18,11 @@
           <!-- 中身 -->
           <th:block th:each="item, stat : *{kintaiDtoList}">
 	          <tr>
-	            <td th:text="|${item.hizuke}${item.youbi}|"  id="bbb"></td>
+	            <td th:text="|${item.hizuke}${item.youbi}|"></td>
 	            <td>
 	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInput(this.id);"
-	                th:field="*{kintaiDtoList[__${stat.index}__].gozen}" readonly>
+	                th:field="*{kintaiDtoList[__${stat.index}__].gozen}" th:data-nen="${item.nen}"
+	                th:data-day="|${item.hizuke}${item.youbi}|" readonly>
 	              <span>&nbsp;～</span>
 	            </td>
 	            <td>
@@ -31,20 +32,20 @@
 	          </tr>
           </th:block>
         </table>
-
-        <p>時分入力サンプル</p>
-        <input type="time" id="birthdate" class="form-control margin-bottom-20"
-          th:field="${timecardInputData.dateFrom}"> ～
-        <input type="time" id="birthdate" class="form-control margin-bottom-20"
-          th:field="${timecardInputData.dateTo}">
       </div>
       <button>キャンセル</button>
       <div id="modal" class="modal">
 		  <div class="modal-content">
 			    <div class="modal-body">
 			      <h1>モーダル画面</h1>
-			      <div id="test"></div>
-			      <input type="button" id="test" value="">
+			      <div id="test1"></div>
+			      <div id="test2"></div>
+			      <p>時分入力サンプル</p>
+			        <input type="time" id="birthdate" class="form-control margin-bottom-20"
+			          th:field="${timecardInputData.dateFrom}"> ～
+			        <input type="time" id="birthdate" class="form-control margin-bottom-20"
+			          th:field="${timecardInputData.dateTo}">
+			      <input type="button" value="OK">
 			      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();"> 
 			    </div>
 			</div>

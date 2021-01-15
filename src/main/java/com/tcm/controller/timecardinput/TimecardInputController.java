@@ -16,6 +16,9 @@ import com.tcm.form.timecardinput.TimecardInputForm;
 import com.tcm.form.timecardinput.sampleKitaiDto;
 import com.tcm.repository.SampleKintaiMapper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Controller
 @RequestMapping("/timecard-input")
 public class TimecardInputController {
@@ -44,7 +47,7 @@ public class TimecardInputController {
 		String targetMonth = "202011";
 		// サンプル DBから値取得 便宜上対象年月は文字列で一旦渡している
 		// 取得されたリストをもとに画面へバインディングする変換処理を作成してください.
-		List<SampleKintaiSqlDto> test = mapper.select("1234", targetMonth);
+//		List<SampleKintaiSqlDto> test = mapper.select("1234", targetMonth);
 
 		// ------------------------------------------------
 		return createModelAndView(form);
@@ -67,12 +70,16 @@ public class TimecardInputController {
 	 * @return 勤怠情報DTOリスト
 	 */
 	private List<sampleKitaiDto> createTmpKintaiDtoList() {
+		Date d = new Date();
+		SimpleDateFormat d2 = new SimpleDateFormat("yyyy年MM月");
+       String c2 = d2.format(d); 
 		var result = new ArrayList<sampleKitaiDto>();
 		var youbiList = Arrays.asList("月", "火", "水", "木", "金", "土", "日");
 		var hi = 1;
 		for (var week = 0; week < 4; week++) {
 			for (var youbi = 0; youbi < youbiList.size(); youbi++) {
 				var r = new sampleKitaiDto();
+				r.setNen(c2);
 				r.setGozen("10:00");
 				r.setGogo("20:00");
 				r.setHizuke(String.valueOf(hi) + "日");
