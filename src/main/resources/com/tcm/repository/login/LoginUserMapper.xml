@@ -6,8 +6,8 @@
 <mapper namespace="com.tcm.repository.login.LoginUserMapper">
     <select id="findUser" resultType="com.tcm.dto.login.LoginUserDto">
         select
-            TRIM(u.user_id)
-            , TRIM(p.password)
+            u.user_id as userId
+            , p.password
         from
             users u
         inner join
