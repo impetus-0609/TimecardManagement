@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,9 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.tcm.form.timecardinput.TimecardInputForm;
 import com.tcm.form.timecardinput.sampleKitaiDto;
 import com.tcm.repository.SampleKintaiMapper;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Controller
 @RequestMapping("/timecard-input")
@@ -97,7 +95,7 @@ public class TimecardInputController {
 	private List<sampleKitaiDto> createTmpKintaiDtoList() {
 		Date d = new Date();
 		SimpleDateFormat d2 = new SimpleDateFormat("yyyy年MM月");
-       String c2 = d2.format(d); 
+       String c2 = d2.format(d);
 		var result = new ArrayList<sampleKitaiDto>();
 		var youbiList = Arrays.asList("月", "火", "水", "木", "金", "土", "日");
 		var hi = 1;
@@ -131,7 +129,7 @@ public class TimecardInputController {
 	 */
 	private String getNowYm() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
-		return dateFormat.format(Calendar.getInstance());
+		return dateFormat.format(Calendar.getInstance().getTime());
 	}
 
 	/**
