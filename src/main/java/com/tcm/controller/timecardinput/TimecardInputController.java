@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tcm.dto.timecardinput.SampleKintaiSqlDto;
 import com.tcm.form.timecardinput.TimecardInputForm;
 import com.tcm.form.timecardinput.sampleKitaiDto;
 import com.tcm.repository.SampleKintaiMapper;
@@ -47,7 +46,7 @@ public class TimecardInputController {
 		String targetMonth = "202011";
 		// サンプル DBから値取得 便宜上対象年月は文字列で一旦渡している
 		// 取得されたリストをもとに画面へバインディングする変換処理を作成してください.
-//		List<SampleKintaiSqlDto> test = mapper.select("1234", targetMonth);
+		//List<SampleKintaiSqlDto> test = mapper.select("1234", targetMonth);
 
 		// ------------------------------------------------
 		return createModelAndView(form);
