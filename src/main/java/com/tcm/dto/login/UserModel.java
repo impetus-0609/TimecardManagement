@@ -14,41 +14,40 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserModel implements UserDetails {
 
-    private String id;
-
-    private String name;
-
-    private String password;
-
+    private UserAccount userAccount;
+    private Collection<GrantedAuthority> authorities;
     private boolean enabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.authorities;
     }
 
     @Override
     public String getPassword() {
-        return this.password;
+        return this.userAccount.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.id;
+        return this.userAccount.getId();
     }
 
     @Override
     public boolean isAccountNonExpired() {
+        //TODO アカウントの期限きれ
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
+        //TODO アカウントのロック
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
+        //TODO 資格情報の期限切れ
         return true;
     }
 
