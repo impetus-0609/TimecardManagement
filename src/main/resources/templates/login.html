@@ -4,21 +4,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Impetus</title>
-  <link th:href="@{/static/css/login.css}" rel="stylesheet"/>
+  <link th:href="@{/css/login.css}" rel="stylesheet">
 </head>
 <body>
 <div class="box">
-  <h1>インピタスログインページです</h1>
-   <form role="form" id="login" th:action="@{/login}" method="post">
-        <div th:if="${iserror}" style="color:red;">
-            <p>ログインできませんでした。やりなおしてください。</p>
-        </div>
-        <p>ユーザID</p>
-        <input type="text" id="username" name="username" autofocus="autofocus" />
-        <p>パスワード</p>
-        <input type="password" id="password" name="password" /><br/>
-        <button type="submit">ログイン</button>
-   </form>
+	<div class="main">
+		<img th:src="@{/img/logo.png}">
+		<form role="form" id="login" th:action="@{/login}" method="post">
+        	<div th:if="${iserror}" style="color:red;">
+            	<p>ログインできませんでした。やりなおしてください。</p>
+        	</div>
+        	<div>ユーザID</div>
+        	<input type="text" id="username" name="username" autofocus="autofocus" />
+        	<div class="mt20">パスワード</div>
+        	<input type="password" id="password" name="password" /><br/>
+        	<button type="submit" class="mt20">ログイン</button>
+		</form>
+	</div>
 </div>
 </body>
 </html>

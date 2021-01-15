@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
     	http.formLogin().loginPage("/login").passwordParameter("password").usernameParameter("username").defaultSuccessUrl("/timecard-input/init").failureUrl("/login-error").permitAll();
-    	http.authorizeRequests().antMatchers("/static/css/**", "/static/images/**", "/static/js/**").permitAll().anyRequest().authenticated();
+    	http.authorizeRequests().antMatchers("/css/**", "/img/**", "/js/**").permitAll().anyRequest().authenticated();
     }
 
     public void configure(AuthenticationManagerBuilder auth) throws Exception{
