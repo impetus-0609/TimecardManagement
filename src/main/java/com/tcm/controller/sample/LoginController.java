@@ -14,7 +14,8 @@ public class LoginController {
 	@Autowired SampleMapper mapper;
 	@Autowired SampleXmlVersionMapper xmlVersionMapper;
 
-	@RequestMapping("/login")
+	//一旦動かないように
+	@RequestMapping("/login_")
 	public String login() {
 		SampleSqlDto dto1 = mapper.select("1");
 		SampleSqlDto dto2 = xmlVersionMapper.select("1");
