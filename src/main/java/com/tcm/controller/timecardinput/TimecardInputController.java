@@ -31,8 +31,6 @@ public class TimecardInputController {
 	private static final String ACTION_PATH_INIT = "init";
 	/** 更新処理. */
 	private static final String ACTION_PATH_UPDATE = "update";
-	/** 遷移後初期表示. */
-	private static final String ACTION_PATH_MOVED_INIT = "moved-init";
 
 	@Autowired SampleKintaiMapper mapper;
 
@@ -68,24 +66,6 @@ public class TimecardInputController {
 		// 入力内容をもとにサービスを呼び出す
 
 		return new ModelAndView(ACTION_PATH_INIT);
-	}
-
-	/**
-	 * 他画面から遷移時初期処理
-	 * @param yearMonth 年月
-	 * @param userId ユーザID
-	 * @return 画面
-	 * @throws ParseException
-	 */
-	@RequestMapping(value = ACTION_PATH_MOVED_INIT, method = RequestMethod.GET)
-	public ModelAndView movedInit(
-			@RequestParam("yearMonth") String yearMonth,
-			@RequestParam("userId") String userId) throws ParseException {
-		// 表示確認用に値詰め替え
-		var form = new TimecardInputForm();
-		form.setKintaiDtoList(createTmpKintaiDtoList());
-
-		return createModelAndView(form);
 	}
 
 	/**
