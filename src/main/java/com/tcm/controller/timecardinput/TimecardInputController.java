@@ -1,14 +1,18 @@
 package com.tcm.controller.timecardinput;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tcm.form.timecardinput.TimecardInputForm;
@@ -29,11 +33,18 @@ public class TimecardInputController {
 	private static final String ACTION_PATH_INIT = "init";
 	/** 更新処理. */
 	private static final String ACTION_PATH_UPDATE = "update";
+	/** 遷移後初期表示. */
+	private static final String ACTION_PATH_MOVED_INIT = "moved-init";
 
 	@Autowired SampleKintaiMapper mapper;
 
 	@RequestMapping(value = ACTION_PATH_INIT, method = RequestMethod.GET)
-	public ModelAndView init() throws ParseException {
+	public ModelAndView init(
+			@RequestParam(name = "yearMonth", required = false) String yearMonth,
+			@RequestParam(name = "userId", required = false) String userId) throws ParseException {
+		String targetMonth = Objects.nonNull(yearMonth) ? yearMonth : getNowYm();
+		String targetUserId = Objects.nonNull(userId) ? userId : getLoginUserId();
+
 		// 初期表示用の情報を取得 ユーザ情報を基に勤怠情報を取得.
 		// サービス呼び出し var DTO = service.hogehoge
 		// 取得データを画面用DTOに詰め替える
@@ -42,8 +53,7 @@ public class TimecardInputController {
 		form.setKintaiDtoList(createTmpKintaiDtoList());
 
 		// ------ ここからサービスに切り出してください -----
-		// 表示対象の年月設定 実装に際して適切な形にしてください.
-		String targetMonth = "202011";
+		// 表示対象の年月設定 実装に際して適切な形にしてください.s
 		// サンプル DBから値取得 便宜上対象年月は文字列で一旦渡している
 		// 取得されたリストをもとに画面へバインディングする変換処理を作成してください.
 		//List<SampleKintaiSqlDto> test = mapper.select("1234", targetMonth);
@@ -62,7 +72,23 @@ public class TimecardInputController {
 		return new ModelAndView(ACTION_PATH_INIT);
 	}
 
+	/**
+	 * 他画面から遷移時初期処理
+	 * @param yearMonth 年月
+	 * @param userId ユーザID
+	 * @return 画面
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = ACTION_PATH_MOVED_INIT, method = RequestMethod.GET)
+	public ModelAndView movedInit(
+			@RequestParam("yearMonth") String yearMonth,
+			@RequestParam("userId") String userId) throws ParseException {
+		// 表示確認用に値詰め替え
+		var form = new TimecardInputForm();
+		form.setKintaiDtoList(createTmpKintaiDtoList());
 
+		return createModelAndView(form);
+	}
 
 	/**
 	 * 表示確認用のメソッドです.
@@ -88,6 +114,34 @@ public class TimecardInputController {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * ログインユーザIDを取得し返却.
+	 * @return ログインユーザID
+	 */
+	private String getLoginUserId() {
+		// TODO ログインユーザIDを返却.
+		return "1";
+	}
+
+	/**
+	 * 現在年月を返却.
+	 * @return 年月
+	 */
+	private String getNowYm() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
+		return dateFormat.format(Calendar.getInstance());
+	}
+
+	/**
+	 * 日付をもとに曜日を返却.
+	 * @param cal 対象日付
+	 * @return 曜日文字列
+	 */
+	private String getWeekDay(Calendar cal) {
+		String weekDay[] = {"(日)","(月)","(火)","(水)","(木)","(金)","(土)"};
+		return weekDay[cal.get(Calendar.DAY_OF_WEEK) - 1];
 	}
 
 	private ModelAndView createModelAndView(TimecardInputForm form) {
