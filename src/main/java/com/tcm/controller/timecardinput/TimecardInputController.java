@@ -20,6 +20,8 @@ import com.tcm.form.timecardinput.TimecardInputForm;
 import com.tcm.form.timecardinput.sampleKitaiDto;
 import com.tcm.repository.SampleKintaiMapper;
 
+import lombok.var;
+
 @Controller
 @RequestMapping("/timecard-input")
 public class TimecardInputController {
