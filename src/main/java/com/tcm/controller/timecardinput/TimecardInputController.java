@@ -47,10 +47,10 @@ public class TimecardInputController {
 
 		// TODO 2/19手塚 元々のソースでは引数のユーザID, 年月に固定値が渡されていたため改修が必要
 		// TODO 2/19手塚 今回は画面表示確認のため別途作成した固定文字のメソッドを呼ぶ.
-		var form = new TimecardInputForm();
-		form.setTimecardInputDtoList(createTmpKintaiDtoList());
+//		var form = new TimecardInputForm();
+//		form.setTimecardInputDtoList(createTmpKintaiDtoList());
 
-		//TimecardInputForm form = getInitData(targetYearMonth, targetUserId);
+		TimecardInputForm form = getInitData(targetYearMonth, targetUserId);
 
 		return createModelAndView(form);
 	}
@@ -59,18 +59,31 @@ public class TimecardInputController {
 	 * 初期表示用の情報を取得 ユーザ情報を基に勤怠情報を取得しformにセットする.
 	 * @return 画面form
 	 */
-	private TimecardInputForm getInitData(String targetYearMonth, String targetUserId) {
+	private TimecardInputForm getInitData(String targetMonth, String id) {
 		//TODO 2/19手塚 initの処理をそのままコピーしているため引数を使用していません。②の改修時に直す対象になります。
 
 		// 初期表示用の情報を取得 ユーザ情報を基に勤怠情報を取得.
-		List<TimecardInputSqlDto> dto1 = mapper.select("1","202101");
+		List<TimecardInputSqlDto> dtoList = mapper.select(id, targetMonth);
 		// 取得データを画面用DTOに詰め替える
 		var form = new TimecardInputForm();
 		// 表示確認用に値詰め替え
+		SimpleDateFormat year = new SimpleDateFormat("yyyy年");
+		SimpleDateFormat day = new SimpleDateFormat("MM月dd日");
+		SimpleDateFormat from = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat to = new SimpleDateFormat("HH:mm");
+		Calendar cal = Calendar.getInstance();
+
 		var result = new ArrayList<TimecardInputDto>();
-		var a = new TimecardInputDto();
-		result.add(a);
-		result.get(0).setHizuke(dto1.get(0).getWork_day_id()) ;
+		for (TimecardInputSqlDto dto: dtoList) {
+			var input = new TimecardInputDto();
+			input.setNen(year.format(dto.getWork_day()));
+			input.setHizuke(day.format(dto.getWork_day()));
+			cal.setTime(dto.getWork_day());
+			input.setYoubi(getWeekDay(cal));
+			input.setGozen(from.format(dto.getWork_from()));
+			input.setGogo(to.format(dto.getWork_to()));
+			result.add(input);
+		}
 		form.setTimecardInputDtoList(result);
 
 		return form;
