@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
     <link th:href="@{../css/timecard-style.css}" rel="stylesheet">
-	<link th:href="@{../css/modal.css}" rel="stylesheet">
+    <link th:href="@{../css/modal.css}" rel="stylesheet">
   </head>
   <body>
 
-	<div id="modal-overlay"></div>
+    <div id="modal-overlay"></div>
     <h1>勤怠入力画面</h1>
     <form th:action="@{/timecard-input}" method="post">
       <div th:object="${timecardInputData}">
@@ -17,41 +17,43 @@
         <table>
           <!-- 中身 -->
           <th:block th:each="item, stat : *{kintaiDtoList}">
-	          <tr>
-	            <td th:text="|${item.hizuke}${item.youbi}|"></td>
-	            <td>
-	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInput(this.id);"
-	                th:field="*{kintaiDtoList[__${stat.index}__].gozen}" th:data-nen="${item.nen}"
-	                th:data-day="|${item.hizuke}${item.youbi}|" readonly>
-	              <span>&nbsp;～</span>
-	            </td>
-	            <td>
-	              <input type="text" size="5" style="cursor:pointer;"
-	                th:field="*{kintaiDtoList[__${stat.index}__].gogo}" readonly>
-	            </td>
-	          </tr>
+              <tr>
+                <td th:text="|${item.hizuke}${item.youbi}|"></td>
+                <td>
+                  <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInput(this.id);"
+                    th:field="*{kintaiDtoList[__${stat.index}__].gozen}" th:data-nen="${item.nen}"
+                    th:data-day="|${item.hizuke}${item.youbi}|" readonly>
+                  <span>&nbsp;～</span>
+                </td>
+                <td>
+                  <input type="text" size="5" style="cursor:pointer;"
+                    th:field="*{kintaiDtoList[__${stat.index}__].gogo}" readonly>
+                </td>
+              </tr>
           </th:block>
         </table>
       </div>
       <button>キャンセル</button>
       <div id="modal" class="modal">
-		  <div class="modal-content">
-			    <div class="modal-body">
-			      <h1>モーダル画面</h1>
-			      <div id="test1"></div>
-			      <div id="test2"></div>
-			      <p>時分入力サンプル</p>
-			        <input type="time" id="birthdate" class="form-control margin-bottom-20"
-			          th:field="${timecardInputData.dateFrom}"> ～
-			        <input type="time" id="birthdate" class="form-control margin-bottom-20"
-			          th:field="${timecardInputData.dateTo}">
-			      <input type="button" value="OK">
-			      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();"> 
-			    </div>
-			</div>
-		</div>
+          <div class="modal-content">
+                <div class="modal-body">
+                  <h1>モーダル画面</h1>
+                  <div id="test1"></div>
+                  <div id="test2"></div>
+                  <p>時分入力サンプル</p>
+                    <input type="time" id="birthdate" class="form-control margin-bottom-20"
+                      th:field="${timecardInputData.dateFrom}"> ～
+                    <input type="time" id="birthdate" class="form-control margin-bottom-20"
+                      th:field="${timecardInputData.dateTo}">
+                  <input type="button" value="OK">
+                  <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();">
+                </div>
+            </div>
+        </div>
       <input type="submit" value="送信">
     </form>
     <script th:src="@{../js/timecard-input.js}"></script>
+    <button type="button" onclick="history.back()">戻る</button>
+    <input type="submit" value="承認">
   </body>
 </html>

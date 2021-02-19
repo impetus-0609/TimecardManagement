@@ -37,7 +37,7 @@ public class LoginController {
         List<Role> roles = authorities.stream()
                 .map(role -> Role.valueOf(role.getAuthority()))
                 .collect(Collectors.toList());
-        if (roles.contains(Role.ROLE_USER)) {
+        if (roles.contains(Role.ROLE_USE)) {
             return "redirect:/timecard-input/init";
         }
         return "redirect:/ManagementScreen";
