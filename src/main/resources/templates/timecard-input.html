@@ -16,18 +16,18 @@
       <p>インピタス五郎</p>
         <table>
           <!-- 中身 -->
-          <th:block th:each="item, stat : *{kintaiDtoList}">
+          <th:block th:each="item, stat : *{timecardInputDtoList}">
 	          <tr>
 	            <td th:text="|${item.hizuke}${item.youbi}|"></td>
 	            <td>
 	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInput(this.id);"
-	                th:field="*{kintaiDtoList[__${stat.index}__].gozen}" th:data-nen="${item.nen}"
+	                th:field="*{timecardInputDtoList[__${stat.index}__].gozen}" th:data-nen="${item.nen}"
 	                th:data-day="|${item.hizuke}${item.youbi}|" readonly>
 	              <span>&nbsp;～</span>
 	            </td>
 	            <td>
 	              <input type="text" size="5" style="cursor:pointer;"
-	                th:field="*{kintaiDtoList[__${stat.index}__].gogo}" readonly>
+	                th:field="*{timecardInputDtoList[__${stat.index}__].gogo}" readonly>
 	            </td>
 	          </tr>
           </th:block>
@@ -46,7 +46,7 @@
 			        <input type="time" id="birthdate" class="form-control margin-bottom-20"
 			          th:field="${timecardInputData.dateTo}">
 			      <input type="button" value="OK">
-			      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();"> 
+			      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();">
 			    </div>
 			</div>
 		</div>

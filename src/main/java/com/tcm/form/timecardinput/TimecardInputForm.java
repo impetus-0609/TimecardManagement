@@ -12,5 +12,5 @@ public class TimecardInputForm {
 	private String txt;
 
 	/** 勤怠情報. */
-	private List<sampleKitaiDto> kintaiDtoList;
+	private List<TimecardInputDto> timecardInputDtoList;
 }
