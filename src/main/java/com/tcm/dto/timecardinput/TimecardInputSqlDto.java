@@ -6,13 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * サンプルです.
+ * 勤怠入力画面のDTO.
  * @author ttzzk
  *
  */
 @Data
 @Builder
-public class SampleKintaiSqlDto {
+public class TimecardInputSqlDto {
 	/** 日ID. */
 	private String work_day_id;
 	/** ユーザID. */
@@ -31,4 +31,5 @@ public class SampleKintaiSqlDto {
 	public void setWork_day_id(String work_day_id) {
 		this.work_day_id = work_day_id;
 	}
+
 }

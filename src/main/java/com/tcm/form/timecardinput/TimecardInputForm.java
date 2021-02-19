@@ -10,7 +10,11 @@ public class TimecardInputForm {
 	private Time dateFrom;
 	private Time dateTo;
 	private String txt;
+	private String workDayId;
+	private String modalDate;
+	private String modalDateFrom;
+	private String modalDateTo;
 
 	/** 勤怠情報. */
-	private List<sampleKitaiDto> kintaiDtoList;
+	private List<TimecardInputDto> timecardInputDtoList;
 }

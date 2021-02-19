@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tcm.dto.sample.SampleSqlDto;
+import com.tcm.dto.timecardinput.TimecardInputSqlDto;
+import com.tcm.form.timecardinput.TimecardInputDto;
 import com.tcm.form.timecardinput.TimecardInputForm;
 import com.tcm.form.timecardinput.sampleKitaiDto;
-import com.tcm.repository.SampleKintaiMapper;
+import com.tcm.repository.TimecardInputMapper;
 
 @Controller
 @RequestMapping("/timecard-input")
@@ -33,7 +35,7 @@ public class TimecardInputController {
 	/** 更新処理. */
 	private static final String ACTION_PATH_UPDATE = "update";
 
-	@Autowired SampleKintaiMapper mapper;
+	@Autowired TimecardInputMapper mapper;
 
 	@RequestMapping(value = ACTION_PATH_INIT, method = RequestMethod.GET)
 	public ModelAndView init(
@@ -43,17 +45,23 @@ public class TimecardInputController {
 		String targetUserId = Objects.nonNull(userId) ? userId : getLoginUserId();
 
 		// 初期表示用の情報を取得 ユーザ情報を基に勤怠情報を取得.
+		List<TimecardInputSqlDto> dto1 = mapper.select("1","202101");
 		// サービス呼び出し var DTO = service.hogehoge
 		// 取得データを画面用DTOに詰め替える
 		var form = new TimecardInputForm();
 		// 表示確認用に値詰め替え
-		form.setKintaiDtoList(createTmpKintaiDtoList());
+		var result = new ArrayList<TimecardInputDto>();
+		var a = new TimecardInputDto();
+		result.add(a);
+		result.get(0).setHizuke(dto1.get(0).getWork_day_id()) ;
+		form.setTimecardInputDtoList(result);
 
 		// ------ ここからサービスに切り出してください -----
 		// 表示対象の年月設定 実装に際して適切な形にしてください.s
+		String testMonth = "202011";
 		// サンプル DBから値取得 便宜上対象年月は文字列で一旦渡している
 		// 取得されたリストをもとに画面へバインディングする変換処理を作成してください.
-		//List<SampleKintaiSqlDto> test = mapper.select("1234", targetMonth);
+		List<TimecardInputSqlDto> test = mapper.select("1234", testMonth);
 
 		// ------------------------------------------------
 		return createModelAndView(form);

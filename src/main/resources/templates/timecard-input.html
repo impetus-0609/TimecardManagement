@@ -16,18 +16,18 @@
       <p>インピタス五郎</p>
         <table>
           <!-- 中身 -->
-          <th:block th:each="item, stat : *{kintaiDtoList}">
+          <th:block th:each="item, stat : *{timecardInputDtoList}">
 	          <tr>
 	            <td th:text="|${item.hizuke}${item.youbi}|"></td>
 	            <td>
-	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInput(this.id);"
-	                th:field="*{kintaiDtoList[__${stat.index}__].gozen}" th:data-nen="${item.nen}"
-	                th:data-day="|${item.hizuke}${item.youbi}|" readonly>
+	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInputGozen(this.id);"
+	                th:field="*{timecardInputDtoList[__${stat.index}__].gozen}" th:data-nen="${item.nen}"
+	                th:data-day="${item.hizuke}" th:data-youbi="${item.youbi}" readonly>
 	              <span>&nbsp;～</span>
 	            </td>
 	            <td>
-	              <input type="text" size="5" style="cursor:pointer;"
-	                th:field="*{kintaiDtoList[__${stat.index}__].gogo}" readonly>
+	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInputGogo(this.id);"
+	                th:field="*{timecardInputDtoList[__${stat.index}__].gogo}" readonly>
 	            </td>
 	          </tr>
           </th:block>
@@ -41,13 +41,14 @@
 				  <form th:action="@{/timecard-input/modal}" method="post">
 					    <div class="modal-body">
 					      <h1>モーダル画面</h1>
-					      <div id="test1"></div>
-					      <div id="test2"></div>
+					      <div id="modalDisplayYear"></div>
+					      <div id="modalDisplayDate"></div>
 					      <p>時分入力サンプル</p>
-					        <input type="time" id="birthdate" class="form-control margin-bottom-20"
-					          th:field="${timecardInputData.dateFrom}"> ～
-					        <input type="time" id="birthdate" class="form-control margin-bottom-20"
-					          th:field="${timecardInputData.dateTo}">
+					        <input type="time" id="modal_from" class="form-control margin-bottom-20"
+					          th:field="${timecardInputData.modalDateFrom}"> ～
+					        <input type="time" id="modal_to" class="form-control margin-bottom-20"
+					          th:field="${timecardInputData.modalDateTo}">
+					        <input type="hidden" id="modal_date" th:field="${timecardInputData.modalDate}">
 					      <input type="submit" value="OK">
 					      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();"> 
 					    </div>

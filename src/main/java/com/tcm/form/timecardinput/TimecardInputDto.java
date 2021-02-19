@@ -3,7 +3,7 @@ package com.tcm.form.timecardinput;
 import lombok.Data;
 
 @Data
-public class sampleKitaiDto {
+public class TimecardInputDto {
 	/** 年月. */
 	private String nen;
 	/** 日付. */
@@ -22,5 +22,4 @@ public class sampleKitaiDto {
 	public void setHizuke(String hizuke) {
 		this.hizuke = hizuke;
 	}
-
 }
