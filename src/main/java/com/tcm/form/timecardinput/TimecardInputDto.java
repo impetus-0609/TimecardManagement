@@ -4,16 +4,20 @@ import lombok.Data;
 
 @Data
 public class TimecardInputDto {
-	/** 年月. */
+	/** work_day id */
+	private String workDayId;
+	/** YYYY年. */
 	private String nen;
-	/** 日付. */
+	/** MM月dd日. */
 	private String hizuke;
 	/** 曜日. */
 	private String youbi;
-	/** 午前. */
+	/** 午前("HH:mm). */
 	private String gozen;
-	/** 午後. */
+	/** 午後("HH:mm). */
 	private String gogo;
+	/** 年月日 */
+	private String ymd;
 
 	public String getHizuke() {
 		return hizuke;

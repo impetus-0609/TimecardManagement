@@ -16,7 +16,7 @@ public interface TimecardInputMapper {
 	/**
 	 * @return
 	 */
-	@Select("select * from work_day where user_id = #{id} and to_char(work_day, 'YYYYMM') = #{targetMonth}")
+	@Select("select * from work_day where user_id = #{id} and to_char(work_day, 'YYYYMM') = #{targetMonth} order by work_day")
 	List<TimecardInputSqlDto> select(@Param("id") String id, @Param("targetMonth") String targetMonth);
 
 	@Update("update"
