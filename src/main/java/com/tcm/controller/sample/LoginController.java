@@ -23,6 +23,12 @@ public class LoginController {
 	@Autowired SampleMapper mapper;
 	@Autowired SampleXmlVersionMapper xmlVersionMapper;
 
+	//一旦動かないように
+	@RequestMapping("/login_")
+	public String login() {
+		return "login"; // login.htmlを表示
+	}
+
     @RequestMapping ("/login_success")
     public String success(@AuthenticationPrincipal UserModel userModel, ModelAndView mv) {
         Collection<? extends GrantedAuthority> authorities = userModel.getAuthorities();
