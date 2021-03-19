@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/templates :: layout(~{::title},~{::body/content()})}">
   <head>
+  <meta charset="utf-8" />
     <title>勤怠入力画面</title>
-    <meta charset="utf-8" />
+  </head>
+  <body>
+  	<script th:src="@{../js/timecard-input.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
     <link th:href="@{../css/timecard-style.css}" rel="stylesheet">
 	<link th:href="@{../css/modal.css}" rel="stylesheet">
-  </head>
-  <body>
-
+	<link rel="stylesheet" th:href="@{../css/base.css}">
+	<div class="main">
 	<div id="modal-overlay"></div>
     <h1>勤怠入力画面</h1>
     <form th:action="@{/timecard-input}" method="post">
@@ -33,28 +36,37 @@
           </th:block>
         </table>
       </div>
+      <div class="btn">
       <button>キャンセル</button>
       <input type="submit" value="送信">
+      </div>
     </form>
-    	    <div id="modal" class="modal">
-			  <div class="modal-content">
-				  <form th:action="@{/timecard-input/modal}" method="post">
-					    <div class="modal-body">
-					      <h1>モーダル画面</h1>
-					      <div id="modalDisplayYear"></div>
-					      <div id="modalDisplayDate"></div>
-					      <p>時分入力サンプル</p>
-					        <input type="time" id="modal_from" class="form-control margin-bottom-20"
-					          th:field="${timecardInputData.modalDateFrom}"> ～
-					        <input type="time" id="modal_to" class="form-control margin-bottom-20"
-					          th:field="${timecardInputData.modalDateTo}">
-					        <input type="hidden" id="modal_date" th:field="${timecardInputData.modalDate}">
-					      <input type="submit" value="OK">
-					      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();"> 
-					    </div>
-					</form>
-				</div>
-			</div>
-    <script th:src="@{../js/timecard-input.js}"></script>
+    <th:block th:if="${#strings.isEmpty(str)}">
+        <form th:action="@{/timecard-input/approval}" method="post" th:object="${approvalForm}">
+            <button type="button" onclick="history.back()">戻る</button>
+            <input type="submit" value="承認">
+            <script th:src="@{../js/timecard-input.js}"></script>
+        </form>
+    </th:block>
+    </div>
+  	 <div id="modal" class="modal">
+	  <div class="modal-content">
+		  <form th:action="@{/timecard-input/modal}" method="post">
+			    <div class="modal-body">
+			      <h1>モーダル画面</h1>
+			      <div id="modalDisplayYear"></div>
+			      <div id="modalDisplayDate"></div>
+			      <p>時分入力サンプル</p>
+			        <input type="time" id="modal_from" class="form-control margin-bottom-20"
+			          th:field="${timecardInputData.modalDateFrom}"> ～
+			        <input type="time" id="modal_to" class="form-control margin-bottom-20"
+			          th:field="${timecardInputData.modalDateTo}">
+			        <input type="hidden" id="modal_date" th:field="${timecardInputData.modalDate}">
+			      <input type="submit" value="OK">
+			      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();">
+			    </div>
+			</form>
+		</div>
+	</div>
   </body>
 </html>

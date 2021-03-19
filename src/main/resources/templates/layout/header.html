@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>header</title>
+</head>
+<body>
+    <!--/* (1) */-->
+    <div th:fragment="header" th:remove="tag">
+        <p style="text-align: center; background: #e5eCf9;"><a th:href="@{../login}">勤怠システム</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!--/* (1) */-->
+<html class="no-js" xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title,body)">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" th:href="@{../css/base.css}" media="screen, projection">
+<script type="text/javascript">
+
+</script>
+<!--/* (2) */-->
+<title th:replace="${title}">勤怠システム</title>
+</head>
+<body>
+	<div class="box">
+    <!--/* (3) */-->
+    <div class="main" id="header" th:replace="~{layout/header :: header}"></div>
+    <!--/* (4) */-->
+    <div class="main" id="body" th:replace="${body}"></div>
+    <!--/* (5) */-->
+    <div class="main" id="footer" th:replace="~{layout/footer :: footer}"></div>
+    </div>
+</body>
+</html>

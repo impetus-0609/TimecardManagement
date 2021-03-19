@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/templates :: layout(~{::title},~{::body/content()})}">
     <head>
         <meta charset="UTF-8">
         <title>管理画面</title>
-        <link th:href="@{/css/manage.css}" rel="stylesheet">
     </head>
     <body>
+    <link th:href="@{../css/manage.css}" rel="stylesheet">
+    <link th:href="@{../css/base.css}" rel="stylesheet">
+    <div class="main">
         <form th:action="@{/ManagementScreen/search}" th:object="${searchForm}" method=post>
             <div class="searchpanel">
                 <div class="searchpanel-contents">
@@ -53,5 +56,6 @@
                 </tr>
             </table>
         </th:block>
+    </div>
     </body>
 </html>
