@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcm.dto.timecardinput.KeyValueDto;
 import com.tcm.dto.timecardinput.TimecardInputSqlDto;
 import com.tcm.form.timecardinput.TimecardInputDto;
 import com.tcm.form.timecardinput.TimecardInputForm;
@@ -118,6 +119,17 @@ public class TimecardInputController {
 			result.add(input);
 		}
 		form.setTimecardInputDtoList(result);
+
+		// 勤怠表選択プルダウンの設定
+		List<KeyValueDto> selectKintaiPulldownDtoList = new ArrayList<KeyValueDto>();
+		List<String> kintaiList = mapper.selectWorkDayList(id);
+		for (String month : kintaiList) {
+			KeyValueDto dto = new KeyValueDto();
+			dto.setKey(month);
+			dto.setValue(month);
+			selectKintaiPulldownDtoList.add(dto);
+		}
+		form.setSelectKintaiPulldownDtoList(selectKintaiPulldownDtoList);
 
 		return form;
 	}

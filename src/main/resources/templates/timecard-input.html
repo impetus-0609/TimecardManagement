@@ -14,6 +14,10 @@
     <form th:action="@{/timecard-input}" method="post">
       <div th:object="${timecardInputData}">
       <p>インピタス五郎</p>
+	  <select id="selectKintai">
+	    <option th:each="item : *{selectKintaiPulldownDtoList}" th:value="${item.key}">[[${item.value}]]</option>
+	  </select>
+      <input type="button" id="selectKintaiSubmit" onclick="javascript:clickKintaiSelect();" value="勤務表選択">
         <table>
           <!-- 中身 -->
           <th:block th:each="item, stat : *{timecardInputDtoList}">
@@ -33,6 +37,10 @@
           </th:block>
         </table>
       </div>
+    </form>
+    <form id="selectKintaiForm" th:action="@{/timecard-input/init}" method="get">
+    	<input type="hidden" id="sendYearMonth" name="yearMonth">
+    	<input type="hidden" id="sendUserId" name="userId">
     </form>
     <th:block th:if="${#strings.isEmpty(str)}">
         <form th:action="@{/timecard-input/approval}" method="post" th:object="${approvalForm}">

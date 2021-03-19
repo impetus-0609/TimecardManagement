@@ -46,3 +46,19 @@ displayModal = (id) =>{
 	var modal = document.getElementById('modal');
 	modal.style.display = 'block';
 };
+
+// 勤怠選択処理
+clickKintaiSelect = () => {
+	var form = document.forms['selectKintaiForm'];
+
+	// 選択勤怠
+	var kintai = document.getElementById('selectKintai').value.replace('-','');
+	document.getElementById('sendYearMonth').value = kintai;
+	// ユーザID
+	var userId = '1';
+	document.getElementById('sendUserId').value = userId;
+
+	form.submit();
+
+
+};
