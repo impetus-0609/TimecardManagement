@@ -51,10 +51,10 @@
     </form>
     <th:block th:if="${#strings.isEmpty(str)}">
     <div sec:authorize="hasAnyRole('ROLE_APP','ROLE_ADM')">
-        <form th:action="@{/timecard-input/approval}" method="post" th:object="${approvalForm}">
+        <form th:action="@{/timecard-input/approval}" method="post">
             <button type="button" onclick="history.back()">戻る</button>
             <input type="submit" value="承認">
-            <th:hidden th:value="${timecardInputData.userId}">
+            <input type="hidden" name="userId" th:value="${timecardInputData.userId}">
             <script th:src="@{../js/timecard-input.js}"></script>
         </form>
     </div>
