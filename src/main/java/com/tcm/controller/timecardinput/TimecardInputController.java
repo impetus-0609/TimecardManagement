@@ -10,17 +10,26 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcm.dto.login.UserAccount;
+import com.tcm.dto.login.UserModel;
+import com.tcm.dto.timecardinput.ApprovalDto;
 import com.tcm.dto.timecardinput.KeyValueDto;
 import com.tcm.dto.timecardinput.TimecardInputSqlDto;
+import com.tcm.entity.Users;
+import com.tcm.form.timecardinput.ApprovalForm;
 import com.tcm.form.timecardinput.TimecardInputDto;
 import com.tcm.form.timecardinput.TimecardInputForm;
 import com.tcm.repository.TimecardInputMapper;
+import com.tcm.service.LoginUserService;
+import com.tcm.service.input.ApprovalService;
 
 import lombok.var;
 
@@ -36,11 +45,22 @@ public class TimecardInputController {
 	/** 更新処理. */
 	private static final String ACTION_PATH_UPDATE = "update";
 	/** 承認処理. */
-    private static final String ACTION_PATH_APPROVAL = "update";
+    private static final String ACTION_PATH_APPROVAL = "approval";
 	/** モーダル処理. */
 	private static final String ACTION_PATH_MODAL = "modal";
 
 	@Autowired TimecardInputMapper mapper;
+
+	@Autowired
+	ApprovalService approvalService;
+
+   @Autowired
+    LoginUserService loginUserService;
+
+	@Autowired
+	TimecardInputHelper timecardInputHelper;
+
+
 
 	/**
 	 * 初期表示処理
@@ -56,9 +76,15 @@ public class TimecardInputController {
 	@RequestMapping(value = ACTION_PATH_INIT, method = RequestMethod.GET)
 	public ModelAndView init(
 			@RequestParam(name = "yearMonth", required = false) String yearMonth,
-			@RequestParam(name = "userId", required = false) String userId) throws ParseException {
+			@RequestParam(name = "userId", required = false) String userId,
+			@AuthenticationPrincipal UserModel userModel) throws ParseException {
+	    if (userModel == null) {
+	        throw new NullPointerException("不正なログイン情報");
+	    }
+	    UserAccount userAccount = userModel.getUserAccount();
+
 		String targetYearMonth = Objects.nonNull(yearMonth) ? yearMonth : getNowYm();
-		String targetUserId = Objects.nonNull(userId) ? userId : getLoginUserId();
+		String targetUserId = Objects.nonNull(userId) ? userId : userAccount.getId();
 
 
 		TimecardInputForm form = getInitData(targetYearMonth, targetUserId);
@@ -73,17 +99,11 @@ public class TimecardInputController {
 	 * @return
 	 * @throws ParseException
 	 */
-    @RequestMapping(value = ACTION_PATH_APPROVAL, method = RequestMethod.GET)
-    public ModelAndView approval(
-            @RequestParam(name = "yearMonth", required = false) String yearMonth,
-            @RequestParam(name = "userId", required = false) String userId) throws ParseException {
-        String targetYearMonth = Objects.nonNull(yearMonth) ? yearMonth : getNowYm();
-        String targetUserId = Objects.nonNull(userId) ? userId : getLoginUserId();
-
-
-        TimecardInputForm form = getInitData(targetYearMonth, targetUserId);
-
-        return createModelAndView(form);
+    @PostMapping(value = ACTION_PATH_APPROVAL)
+    public String approval(ApprovalForm form) {
+        ApprovalDto dto = timecardInputHelper.mappingApprovalDto(form);
+        approvalService.approval(dto);
+        return "redirect:/timecard-input/init";
     }
 
 	/**
@@ -130,17 +150,12 @@ public class TimecardInputController {
 			selectKintaiPulldownDtoList.add(dto);
 		}
 		form.setSelectKintaiPulldownDtoList(selectKintaiPulldownDtoList);
+		// 3/19追加
+		Users users = loginUserService.findUsers(id);
+		form.setUserName(users.getUserName());
+		form.setUserId(users.getUserId());
 
 		return form;
-	}
-
-	/**
-	 * ログインユーザIDを取得し返却.
-	 * @return ログインユーザID
-	 */
-	private String getLoginUserId() {
-		// TODO ログインユーザIDを返却.
-		return "1";
 	}
 
 	/**
@@ -190,7 +205,11 @@ public class TimecardInputController {
 		Timestamp updateDate = formatTimestamp(nowDt);
 
 		mapper.updateWorkDay(targetId, updateFrom, updateTo, updateDate);
-		return new ModelAndView("redirect:" + ACTION_PATH_INIT);
+		String param = "?yearMonth=";
+		param += targetDateStr.replace("-", "").substring(0,6);
+		param += "&userId=";
+		param += form.getModalUserId();
+		return new ModelAndView("redirect:" + ACTION_PATH_INIT + param);
 	}
 
 	/**

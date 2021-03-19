@@ -37,11 +37,13 @@ displayModal = (id) =>{
 	var modalElementTo = document.getElementById('modal_to');
 	var modalElementDate = document.getElementById('modal_date');
 	var modalElementWorkDayId = document.getElementById('modal_workDayId');
+	var modalElementUserId = document.getElementById('modal_userId');
 
 	modalElementFrom.value = gozen.value;
 	modalElementTo.value = gogo.value;
 	modalElementDate.value = gozen.dataset.ymd;
 	modalElementWorkDayId.value = gozen.dataset.workdayid;
+	modalElementUserId.value = document.getElementById('sendUserId').value;
 
 	var modal = document.getElementById('modal');
 	modal.style.display = 'block';
@@ -55,8 +57,8 @@ clickKintaiSelect = () => {
 	var kintai = document.getElementById('selectKintai').value.replace('-','');
 	document.getElementById('sendYearMonth').value = kintai;
 	// ユーザID
-	var userId = '1';
-	document.getElementById('sendUserId').value = userId;
+	//var userId = doument.getElementById('userId').value;
+	//document.getElementById('sendUserId').value = userId;
 
 	form.submit();
 

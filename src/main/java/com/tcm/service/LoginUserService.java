@@ -1,5 +1,7 @@
 package com.tcm.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ public class LoginUserService {
     private LoginUserRepository loginUserRepository;
 
     public Users findUsers(String userId) {
-        return loginUserRepository.findByPk(userId);
+        List<Users> usersList = loginUserRepository.findByPk(userId);
+        return usersList.get(0);
     }
 }
