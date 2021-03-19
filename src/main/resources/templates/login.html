@@ -10,17 +10,15 @@
 <div class="box">
 	<div class="main">
 		<img th:src="@{/img/logo.png}">
-		<div th:if="${iserror}" style="color:red;">
-        	<p>ログインできませんでした。やりなおしてください。</p>
-        </div>
 		<form role="form" id="login" th:action="@{/login}" method="post">
-        	<div>ユーザID</div>
-        	<input type="text" id="username" name="username" autofocus="autofocus" placeholder="username"/>
-        	<div class="mt20">パスワード</div>
-        	<input type="password" id="password" name="password" placeholder="password"/><br/>
-        	<div class="button-area">
-        		<a><button type="submit" class="mt20">ログイン</button></a>
+        	<div th:if="${iserror}" style="color:red;">
+            	<p>ログインできませんでした。やりなおしてください。</p>
         	</div>
+        	<div>ユーザID</div>
+        	<input type="text" id="username" name="username" autofocus="autofocus" />
+        	<div class="mt20">パスワード</div>
+        	<input type="password" id="password" name="password" /><br/>
+        	<button type="submit" class="mt20">ログイン</button>
 		</form>
 	</div>
 </div>
