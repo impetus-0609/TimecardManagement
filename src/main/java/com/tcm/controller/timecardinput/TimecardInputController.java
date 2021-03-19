@@ -22,6 +22,8 @@ import com.tcm.form.timecardinput.TimecardInputDto;
 import com.tcm.form.timecardinput.TimecardInputForm;
 import com.tcm.repository.TimecardInputMapper;
 
+import lombok.var;
+
 @Controller
 @RequestMapping("/timecard-input")
 public class TimecardInputController {
@@ -33,6 +35,8 @@ public class TimecardInputController {
 	private static final String ACTION_PATH_INIT = "init";
 	/** 更新処理. */
 	private static final String ACTION_PATH_UPDATE = "update";
+	/** 承認処理. */
+    private static final String ACTION_PATH_APPROVAL = "update";
 	/** モーダル処理. */
 	private static final String ACTION_PATH_MODAL = "modal";
 
@@ -54,6 +58,23 @@ public class TimecardInputController {
 
 		return createModelAndView(form);
 	}
+
+    @RequestMapping(value = ACTION_PATH_APPROVAL, method = RequestMethod.GET)
+    public ModelAndView approval(
+            @RequestParam(name = "yearMonth", required = false) String yearMonth,
+            @RequestParam(name = "userId", required = false) String userId) throws ParseException {
+        String targetYearMonth = Objects.nonNull(yearMonth) ? yearMonth : getNowYm();
+        String targetUserId = Objects.nonNull(userId) ? userId : getLoginUserId();
+
+        // TODO 2/19手塚 元々のソースでは引数のユーザID, 年月に固定値が渡されていたため改修が必要
+        // TODO 2/19手塚 今回は画面表示確認のため別途作成した固定文字のメソッドを呼ぶ.
+//      var form = new TimecardInputForm();
+//      form.setTimecardInputDtoList(createTmpKintaiDtoList());
+
+        TimecardInputForm form = getInitData(targetYearMonth, targetUserId);
+
+        return createModelAndView(form);
+    }
 
 	/**
 	 * 初期表示用の情報を取得 ユーザ情報を基に勤怠情報を取得しformにセットする.
