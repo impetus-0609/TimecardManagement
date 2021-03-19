@@ -23,7 +23,7 @@
 	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInputGozen(this.id);"
 	                th:field="*{timecardInputDtoList[__${stat.index}__].gozen}" th:data-nen="${item.nen}"
 	                th:data-day="${item.hizuke}" th:data-youbi="${item.youbi}" readonly>
-	              <span>&nbsp;～</span>
+	              <span style="text-align:center;">&nbsp;～</span>
 	            </td>
 	            <td>
 	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInputGogo(this.id);"
@@ -33,8 +33,8 @@
           </th:block>
         </table>
       </div>
-      <button>キャンセル</button>
-      <input type="submit" value="送信">
+      <button class="btn" id="btnCancel">キャンセル</button>
+      <input class="btn" type="submit" value="送信">
     </form>
     	    <div id="modal" class="modal">
 			  <div class="modal-content">
@@ -50,7 +50,7 @@
 					          th:field="${timecardInputData.modalDateTo}">
 					        <input type="hidden" id="modal_date" th:field="${timecardInputData.modalDate}">
 					      <input type="submit" value="OK">
-					      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();"> 
+					      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();">
 					    </div>
 					</form>
 				</div>

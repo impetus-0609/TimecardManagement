@@ -9,6 +9,24 @@ h1 {
 body {
     background-color: #666666;
     text-align:center;
-    color: #9efff;
+    color: #9effff;
 }
 
+table {
+    border-collapse:collapse;
+}
+table tr    {
+    border:1px solid #dedede;
+    border-color: #666666;
+}
+table tr td   {
+    padding: 4px;
+}
+
+.btn   {
+    margin: 10px 0px 0px 0px;
+}
+
+#btnCancel	{
+    margin: 10px 0px 0px 148px;
+}
