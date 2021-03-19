@@ -36,8 +36,10 @@
           </th:block>
         </table>
       </div>
+      <div class="btn">
       <button>キャンセル</button>
       <input type="submit" value="送信">
+      </div>
     </form>
     <th:block th:if="${#strings.isEmpty(str)}">
         <form th:action="@{/timecard-input/approval}" method="post" th:object="${approvalForm}">

@@ -24,9 +24,6 @@ table tr td   {
 }
 
 .btn   {
-    margin: 10px 0px 0px 0px;
-}
-
-#btnCancel	{
-    margin: 10px 0px 0px 148px;
+	text-align:center;
+    margin: 10px 0px 10px 0px;
 }
