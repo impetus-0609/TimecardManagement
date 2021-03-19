@@ -17,6 +17,10 @@
     <form th:action="@{/timecard-input}" method="post">
       <div th:object="${timecardInputData}">
       <p>インピタス五郎</p>
+	  <select id="selectKintai">
+	    <option th:each="item : *{selectKintaiPulldownDtoList}" th:value="${item.key}">[[${item.value}]]</option>
+	  </select>
+      <input type="button" id="selectKintaiSubmit" onclick="javascript:clickKintaiSelect();" value="勤務表選択">
         <table>
           <!-- 中身 -->
           <th:block th:each="item, stat : *{timecardInputDtoList}">
@@ -25,7 +29,7 @@
 	            <td>
 	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInputGozen(this.id);"
 	                th:field="*{timecardInputDtoList[__${stat.index}__].gozen}" th:data-nen="${item.nen}"
-	                th:data-day="${item.hizuke}" th:data-youbi="${item.youbi}" readonly>
+	                th:data-day="${item.hizuke}" th:data-youbi="${item.youbi}" th:data-workdayid="${item.workDayId}" th:data-ymd="${item.ymd}" readonly>
 	              <span>&nbsp;～</span>
 	            </td>
 	            <td>
@@ -41,13 +45,18 @@
       <input type="submit" value="送信">
       </div>
     </form>
+    <form id="selectKintaiForm" th:action="@{/timecard-input/init}" method="get">
+    	<input type="hidden" id="sendYearMonth" name="yearMonth">
+    	<input type="hidden" id="sendUserId" name="userId" th:value="${timecardInputData.userId}">
+    </form>
     <th:block th:if="${#strings.isEmpty(str)}">
+    <div sec:authorize="hasAnyRole('ROLE_APP','ROLE_ADM')">
         <form th:action="@{/timecard-input/approval}" method="post" th:object="${approvalForm}">
             <button type="button" onclick="history.back()">戻る</button>
             <input type="submit" value="承認">
+            <th:hidden th:value="${timecardInputData.userId}">
             <script th:src="@{../js/timecard-input.js}"></script>
         </form>
-    </th:block>
     </div>
   	 <div id="modal" class="modal">
 	  <div class="modal-content">
@@ -62,6 +71,8 @@
 			        <input type="time" id="modal_to" class="form-control margin-bottom-20"
 			          th:field="${timecardInputData.modalDateTo}">
 			        <input type="hidden" id="modal_date" th:field="${timecardInputData.modalDate}">
+					        <input type="hidden" id="modal_workDayId" th:field="${timecardInputData.modalWorkDayId}">
+					        <input type="hidden" id="modal_userId" th:field="${timecardInputData.modalUserId}">
 			      <input type="submit" value="OK">
 			      <input type="button" id="closeBtn" value="close" onclick="javascript:closeModai();">
 			    </div>

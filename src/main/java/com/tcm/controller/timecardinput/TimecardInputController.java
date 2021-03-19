@@ -4,23 +4,32 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.tcm.dto.login.UserAccount;
+import com.tcm.dto.login.UserModel;
+import com.tcm.dto.timecardinput.ApprovalDto;
+import com.tcm.dto.timecardinput.KeyValueDto;
 import com.tcm.dto.timecardinput.TimecardInputSqlDto;
+import com.tcm.entity.Users;
+import com.tcm.form.timecardinput.ApprovalForm;
 import com.tcm.form.timecardinput.TimecardInputDto;
 import com.tcm.form.timecardinput.TimecardInputForm;
 import com.tcm.repository.TimecardInputMapper;
+import com.tcm.service.LoginUserService;
+import com.tcm.service.input.ApprovalService;
 
 import lombok.var;
 
@@ -36,44 +45,65 @@ public class TimecardInputController {
 	/** 更新処理. */
 	private static final String ACTION_PATH_UPDATE = "update";
 	/** 承認処理. */
-    private static final String ACTION_PATH_APPROVAL = "update";
+    private static final String ACTION_PATH_APPROVAL = "approval";
 	/** モーダル処理. */
 	private static final String ACTION_PATH_MODAL = "modal";
 
 	@Autowired TimecardInputMapper mapper;
 
+	@Autowired
+	ApprovalService approvalService;
+
+   @Autowired
+    LoginUserService loginUserService;
+
+	@Autowired
+	TimecardInputHelper timecardInputHelper;
+
+
+
+	/**
+	 * 初期表示処理
+	 * ・ログイン画面から遷移時
+	 * 　ログインユーザID,現在年月から勤怠データを取得し表示.
+	 * ・管理画面から遷移時
+	 * 　指定されたユーザID,指定年月から勤怠データを取得し表示
+	 * @param yearMonth 年月
+	 * @param userId ユーザID
+	 * @return 画面
+	 * @throws ParseException
+	 */
 	@RequestMapping(value = ACTION_PATH_INIT, method = RequestMethod.GET)
 	public ModelAndView init(
 			@RequestParam(name = "yearMonth", required = false) String yearMonth,
-			@RequestParam(name = "userId", required = false) String userId) throws ParseException {
-		String targetYearMonth = Objects.nonNull(yearMonth) ? yearMonth : getNowYm();
-		String targetUserId = Objects.nonNull(userId) ? userId : getLoginUserId();
+			@RequestParam(name = "userId", required = false) String userId,
+			@AuthenticationPrincipal UserModel userModel) throws ParseException {
+	    if (userModel == null) {
+	        throw new NullPointerException("不正なログイン情報");
+	    }
+	    UserAccount userAccount = userModel.getUserAccount();
 
-		// TODO 2/19手塚 元々のソースでは引数のユーザID, 年月に固定値が渡されていたため改修が必要
-		// TODO 2/19手塚 今回は画面表示確認のため別途作成した固定文字のメソッドを呼ぶ.
-//		var form = new TimecardInputForm();
-//		form.setTimecardInputDtoList(createTmpKintaiDtoList());
+		String targetYearMonth = Objects.nonNull(yearMonth) ? yearMonth : getNowYm();
+		String targetUserId = Objects.nonNull(userId) ? userId : userAccount.getId();
+
 
 		TimecardInputForm form = getInitData(targetYearMonth, targetUserId);
 
 		return createModelAndView(form);
 	}
 
-    @RequestMapping(value = ACTION_PATH_APPROVAL, method = RequestMethod.GET)
-    public ModelAndView approval(
-            @RequestParam(name = "yearMonth", required = false) String yearMonth,
-            @RequestParam(name = "userId", required = false) String userId) throws ParseException {
-        String targetYearMonth = Objects.nonNull(yearMonth) ? yearMonth : getNowYm();
-        String targetUserId = Objects.nonNull(userId) ? userId : getLoginUserId();
-
-        // TODO 2/19手塚 元々のソースでは引数のユーザID, 年月に固定値が渡されていたため改修が必要
-        // TODO 2/19手塚 今回は画面表示確認のため別途作成した固定文字のメソッドを呼ぶ.
-//      var form = new TimecardInputForm();
-//      form.setTimecardInputDtoList(createTmpKintaiDtoList());
-
-        TimecardInputForm form = getInitData(targetYearMonth, targetUserId);
-
-        return createModelAndView(form);
+	/**
+	 * 承認処理
+	 * @param yearMonth
+	 * @param userId
+	 * @return
+	 * @throws ParseException
+	 */
+    @PostMapping(value = ACTION_PATH_APPROVAL)
+    public String approval(ApprovalForm form) {
+        ApprovalDto dto = timecardInputHelper.mappingApprovalDto(form);
+        approvalService.approval(dto);
+        return "redirect:/timecard-input/init";
     }
 
 	/**
@@ -81,7 +111,6 @@ public class TimecardInputController {
 	 * @return 画面form
 	 */
 	private TimecardInputForm getInitData(String targetMonth, String id) {
-		//TODO 2/19手塚 initの処理をそのままコピーしているため引数を使用していません。②の改修時に直す対象になります。
 
 		// 初期表示用の情報を取得 ユーザ情報を基に勤怠情報を取得.
 		List<TimecardInputSqlDto> dtoList = mapper.select(id, targetMonth);
@@ -92,57 +121,41 @@ public class TimecardInputController {
 		SimpleDateFormat day = new SimpleDateFormat("MM月dd日");
 		SimpleDateFormat from = new SimpleDateFormat("HH:mm");
 		SimpleDateFormat to = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat yyyymmdd = new SimpleDateFormat("yyyy-MM-dd");
+
 		Calendar cal = Calendar.getInstance();
 
 		var result = new ArrayList<TimecardInputDto>();
 		for (TimecardInputSqlDto dto: dtoList) {
 			var input = new TimecardInputDto();
+			input.setWorkDayId(dto.getWork_day_id());
 			input.setNen(year.format(dto.getWork_day()));
 			input.setHizuke(day.format(dto.getWork_day()));
 			cal.setTime(dto.getWork_day());
 			input.setYoubi(getWeekDay(cal));
 			input.setGozen(from.format(dto.getWork_from()));
 			input.setGogo(to.format(dto.getWork_to()));
+			input.setYmd(yyyymmdd.format(dto.getWork_day()));
 			result.add(input);
 		}
 		form.setTimecardInputDtoList(result);
 
-		return form;
-	}
-
-	/**
-	 * 表示確認用のメソッドです.
-	 * @return 勤怠情報DTOリスト
-	 */
-	private List<TimecardInputDto> createTmpKintaiDtoList() {
-		Date d = new Date();
-		SimpleDateFormat d2 = new SimpleDateFormat("yyyy年MM月");
-       String c2 = d2.format(d);
-		var result = new ArrayList<TimecardInputDto>();
-		var youbiList = Arrays.asList("月", "火", "水", "木", "金", "土", "日");
-		var hi = 1;
-		for (var week = 0; week < 4; week++) {
-			for (var youbi = 0; youbi < youbiList.size(); youbi++) {
-				var r = new TimecardInputDto();
-				r.setNen(c2);
-				r.setGozen("10:00");
-				r.setGogo("20:00");
-				r.setHizuke(String.valueOf(hi) + "日");
-				r.setYoubi("(" + youbiList.get(youbi) + ")");
-				result.add(r);
-				hi++;
-			}
+		// 勤怠表選択プルダウンの設定
+		List<KeyValueDto> selectKintaiPulldownDtoList = new ArrayList<KeyValueDto>();
+		List<String> kintaiList = mapper.selectWorkDayList(id);
+		for (String month : kintaiList) {
+			KeyValueDto dto = new KeyValueDto();
+			dto.setKey(month);
+			dto.setValue(month);
+			selectKintaiPulldownDtoList.add(dto);
 		}
-		return result;
-	}
+		form.setSelectKintaiPulldownDtoList(selectKintaiPulldownDtoList);
+		// 3/19追加
+		Users users = loginUserService.findUsers(id);
+		form.setUserName(users.getUserName());
+		form.setUserId(users.getUserId());
 
-	/**
-	 * ログインユーザIDを取得し返却.
-	 * @return ログインユーザID
-	 */
-	private String getLoginUserId() {
-		// TODO ログインユーザIDを返却.
-		return "1";
+		return form;
 	}
 
 	/**
@@ -164,12 +177,6 @@ public class TimecardInputController {
 		return weekDay[cal.get(Calendar.DAY_OF_WEEK) - 1];
 	}
 
-	private ModelAndView createModelAndView(TimecardInputForm form) {
-		ModelAndView r = new ModelAndView();
-		r.setViewName(TIMECARD_INPUT_HTML);
-		r.addObject(TIMECARD_INPUT_DATA, form);
-		return r;
-	}
 
 	@RequestMapping("/timecard-input/modal")
 	public String modal() {
@@ -182,21 +189,36 @@ public class TimecardInputController {
 	 */
 	@RequestMapping(value = ACTION_PATH_MODAL, method = RequestMethod.POST)
 	public ModelAndView modal(TimecardInputForm form) {
-		Date date1 = new Date();
-		SimpleDateFormat sdformat1
-		= new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-		String nowDate = sdformat1.format(date1);
-		String from = form.getModalDateFrom();
-		String to = form.getModalDateTo();
-		String date = form.getModalDate();
-		String currentTimestampToStringFrom = "2020/01/01 " + from;
-		String currentTimestampToStringTo = "2020/01/01 " + to;
-		Timestamp timestampFrom = new Timestamp(toDate(currentTimestampToStringFrom,"yyyy/MM/dd HH:mm").getTime());
-		Timestamp timestampTo = new Timestamp(toDate(currentTimestampToStringTo,"yyyy/MM/dd HH:mm").getTime());
-		Timestamp timestampNowdate = new Timestamp(toDate(nowDate,"yyyy/MM/dd HH:mm").getTime());
-		mapper.updateWorkDay("1", timestampFrom, timestampTo, timestampNowdate);
-		TimecardInputForm data = getInitData("", "");
-		return createModelAndView(data);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String nowDt = format.format(new Date());
+		// YYYY-MM-DD
+		String targetDateStr = form.getModalDate();
+		// HH:MM
+		String dateFrom = form.getModalDateFrom();
+		String dateTo = form.getModalDateTo();
+		// 更新対象PK
+		String targetId = form.getModalWorkDayId();
+
+		// 更新対象データの整形
+		Timestamp updateFrom = formatTimestamp(targetDateStr + " " + dateFrom);
+		Timestamp updateTo = formatTimestamp(targetDateStr + " " + dateTo);
+		Timestamp updateDate = formatTimestamp(nowDt);
+
+		mapper.updateWorkDay(targetId, updateFrom, updateTo, updateDate);
+		String param = "?yearMonth=";
+		param += targetDateStr.replace("-", "").substring(0,6);
+		param += "&userId=";
+		param += form.getModalUserId();
+		return new ModelAndView("redirect:" + ACTION_PATH_INIT + param);
+	}
+
+	/**
+	 * 引数の文字列をタイムスタンプ型で返却する.
+	 * @param target 対象文字列
+	 * @return Timestamp
+	 */
+	private Timestamp formatTimestamp(String target) {
+		return new Timestamp(toDate(target,"yyyy-MM-dd HH:mm").getTime());
 	}
 
 	/**
@@ -212,5 +234,12 @@ public class TimecardInputController {
 		  } finally {
 		    dateFormat = null;
 		  }
+	}
+
+	private ModelAndView createModelAndView(TimecardInputForm form) {
+		ModelAndView r = new ModelAndView();
+		r.setViewName(TIMECARD_INPUT_HTML);
+		r.addObject(TIMECARD_INPUT_DATA, form);
+		return r;
 	}
 }
