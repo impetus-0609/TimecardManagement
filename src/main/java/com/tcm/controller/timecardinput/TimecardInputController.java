@@ -59,8 +59,6 @@ public class TimecardInputController {
 	@Autowired
 	TimecardInputHelper timecardInputHelper;
 
-
-
 	/**
 	 * 初期表示処理
 	 * ・ログイン画面から遷移時
@@ -85,7 +83,6 @@ public class TimecardInputController {
 		String targetYearMonth = Objects.nonNull(yearMonth) ? yearMonth : getNowYm();
 		String targetUserId = Objects.nonNull(userId) ? userId : userAccount.getId();
 
-
 		TimecardInputForm form = getInitData(targetYearMonth, targetUserId);
 
 		return createModelAndView(form);
@@ -98,11 +95,12 @@ public class TimecardInputController {
 	 * @return
 	 * @throws ParseException
 	 */
-    @PostMapping(value = ACTION_PATH_APPROVAL)
-    public String approval(ApprovalForm form) {
+    @PostMapping(ACTION_PATH_APPROVAL)
+    public ModelAndView approval(ApprovalForm form, ModelAndView mv) {
         ApprovalDto dto = timecardInputHelper.mappingApprovalDto(form);
         approvalService.approval(dto);
-        return "redirect:/timecard-input/init";
+        mv.setViewName("redirect:" + ACTION_PATH_INIT);
+        return mv;
     }
 
 	/**
