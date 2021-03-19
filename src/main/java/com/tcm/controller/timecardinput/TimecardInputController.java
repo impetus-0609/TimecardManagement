@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.tcm.dto.login.UserAccount;
 import com.tcm.dto.login.UserModel;
 import com.tcm.dto.timecardinput.ApprovalDto;
+import com.tcm.dto.timecardinput.KeyValueDto;
 import com.tcm.dto.timecardinput.TimecardInputSqlDto;
 import com.tcm.entity.Users;
 import com.tcm.form.timecardinput.ApprovalForm;
@@ -139,21 +140,22 @@ public class TimecardInputController {
 		}
 		form.setTimecardInputDtoList(result);
 
+		// 勤怠表選択プルダウンの設定
+		List<KeyValueDto> selectKintaiPulldownDtoList = new ArrayList<KeyValueDto>();
+		List<String> kintaiList = mapper.selectWorkDayList(id);
+		for (String month : kintaiList) {
+			KeyValueDto dto = new KeyValueDto();
+			dto.setKey(month);
+			dto.setValue(month);
+			selectKintaiPulldownDtoList.add(dto);
+		}
+		form.setSelectKintaiPulldownDtoList(selectKintaiPulldownDtoList);
 		// 3/19追加
 		Users users = loginUserService.findUsers(id);
 		form.setUserName(users.getUserName());
 		form.setUserId(users.getUserId());
 
 		return form;
-	}
-
-	/**
-	 * ログインユーザIDを取得し返却.
-	 * @return ログインユーザID
-	 */
-	private String getLoginUserId() {
-		// TODO ログインユーザIDを返却.
-		return "1";
 	}
 
 	/**
@@ -203,7 +205,11 @@ public class TimecardInputController {
 		Timestamp updateDate = formatTimestamp(nowDt);
 
 		mapper.updateWorkDay(targetId, updateFrom, updateTo, updateDate);
-		return new ModelAndView("redirect:" + ACTION_PATH_INIT);
+		String param = "?yearMonth=";
+		param += targetDateStr.replace("-", "").substring(0,6);
+		param += "&userId=";
+		param += form.getModalUserId();
+		return new ModelAndView("redirect:" + ACTION_PATH_INIT + param);
 	}
 
 	/**

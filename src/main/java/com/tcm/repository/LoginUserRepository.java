@@ -10,9 +10,9 @@ import com.tcm.entity.Users;
 @Mapper
 public interface LoginUserRepository {
 
-    @Select("select "
-            + "  us.user_id as id "
-            + "  , us.user_name as name "
+    @Select("select * "
+            //+ "  us.user_id "
+            //+ "  , us.user_name "
             + "from "
             + "  users us "
             + "where "
