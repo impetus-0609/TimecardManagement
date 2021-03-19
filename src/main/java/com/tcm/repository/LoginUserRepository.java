@@ -1,5 +1,7 @@
 package com.tcm.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -15,6 +17,6 @@ public interface LoginUserRepository {
             + "  users us "
             + "where "
             + "  us.user_id = #{userId} ")
-    public Users findByPk(String userId);
+    public List<Users> findByPk(String userId);
 
 }
