@@ -36,6 +36,13 @@
       <button class="btn" id="btnCancel">キャンセル</button>
       <input class="btn" type="submit" value="送信">
     </form>
+    <th:block th:if="${#strings.isEmpty(str)}">
+        <form th:action="@{/timecard-input/approval}" method="post" th:object="${approvalForm}">
+            <button type="button" onclick="history.back()">戻る</button>
+            <input type="submit" value="承認">
+            <script th:src="@{../js/timecard-input.js}"></script>
+        </form>
+    </th:block>
     	    <div id="modal" class="modal">
 			  <div class="modal-content">
 				  <form th:action="@{/timecard-input/modal}" method="post">

@@ -23,19 +23,13 @@ public class LoginController {
 	@Autowired SampleMapper mapper;
 	@Autowired SampleXmlVersionMapper xmlVersionMapper;
 
-	//一旦動かないように
-	@RequestMapping("/login_")
-	public String login() {
-		return "login"; // login.htmlを表示
-	}
-
     @RequestMapping ("/login_success")
     public String success(@AuthenticationPrincipal UserModel userModel, ModelAndView mv) {
         Collection<? extends GrantedAuthority> authorities = userModel.getAuthorities();
         List<Role> roles = authorities.stream()
                 .map(role -> Role.valueOf(role.getAuthority()))
                 .collect(Collectors.toList());
-        if (roles.contains(Role.ROLE_USER)) {
+        if (roles.contains(Role.ROLE_USE)) {
             return "redirect:/timecard-input/init";
         }
         return "redirect:/ManagementScreen";

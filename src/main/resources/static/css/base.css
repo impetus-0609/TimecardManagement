@@ -15,18 +15,10 @@
   flex-wrap: wrap;
 }
 
+
+
 .mt20 {
 	margin-top: 20px;
-}
-
-.button-area {
-  width: 100%;
-  text-align: center;
-}
-
-.button-area a {
-  display: inline-block;
-  width: 50%;
 }
 
 
