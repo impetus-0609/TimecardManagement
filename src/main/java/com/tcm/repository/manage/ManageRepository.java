@@ -38,4 +38,24 @@ public interface ManageRepository {
             + "</script>")
     public List<SearchResultDto> searchManage(@Param("dto")SearchDto dto);
 
+    @Select("select"
+            + "  app.year_month as year_month , "
+            + "  us.user_name as user_name , "
+            + "  app.approval_status_cd as approval_status "
+            + "from"
+            + "  approval app "
+            + "  inner join users us"
+            + "    on app.user_id = us.user_id  "
+            + "where"
+//            + "  <if test=\"dto.selectYear != null and dto.selectYear != ''\">"
+            + "    app.year_month = #{dto.selectYearMonth}")
+//            + "  </if>"
+//            + "  <if test=\"dto.name != null and dto.name != ''\">"
+//            + "    and us.user_name = #{dto.name}"
+//            + "  </if>"
+//            + "  <if test=\"dto.approvalStatus != null and dto.approvalStatus != ''\">"
+//            + "    and app.approval_status_cd = #{dto.approvalStatus}")
+//            + "  </if>")
+    public List<SearchResultDto> searchUserList(@Param("dto")SearchDto dto);
+
 }

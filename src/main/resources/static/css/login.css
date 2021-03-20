@@ -41,4 +41,78 @@
 /* ------------------------------------ */
 @media (min-width: 1024px) {
 
+<<<<<<< feature_fukuda
+=======
+.act-logo {
+	margin-top: 30px;
+}
+
+.mt20 {
+	margin-top: 20px;
+}
+
+.font-box {
+	width: 250px;
+}
+
+.button-area {
+  width: 100%;
+  text-align: center;
+}
+
+.button-area a {
+  display: inline-block;
+  width: 100%;
+}
+
+#login{
+	margin-top: 50px;
+}
+
+#login input[type=text]{
+  width: 100%;
+  height: 40px;
+ /* background: transparent; */
+ background-color: 00a1e9;
+  border: 2px solid rgba(255,255,255,1);
+  border-radius: 2px;
+  color: #FFF;
+  font-family: 'Exo', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 4px;
+}
+
+#login input[type=password]{
+  width: 100%;
+  height: 40px;
+  /* background: transparent; */
+  border: 2px solid rgba(255,255,255,1);
+  background-color: 00a1e9;
+  border-radius: 2px;
+  color: #FFF;
+  font-family: 'Exo', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 4px;
+  margin-top: 10px;
+}
+
+.btn-flat-border {
+  display: inline-block;
+  padding: 0.3em 1em;
+  text-decoration: none;
+  color: #000;
+  border: solid 2px #67c5ff;
+  border-radius: 3px;
+  transition: .4s;
+}
+
+.btn-flat-border:hover {
+  background: #fff352;
+  color: #000;
+}
+
+
+>>>>>>> 316f25e ログイン画面の改良
 }

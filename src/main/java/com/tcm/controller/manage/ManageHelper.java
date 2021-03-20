@@ -25,8 +25,8 @@ public class ManageHelper {
 
     public SearchDto mappingSearchDto(SearchForm form) {
         return SearchDto.builder()
-                .selectYear(form.getSelectYear())
-                .selectMonth(form.getSelectMonth())
+//                .selectYearMonth(form.getSelectYear() + form.getSelectMonth())
+                .selectYearMonth(form.getSelectYear() + "03")
                 .name(form.getName())
                 .approvalStatus(form.getApprovalStatus()).build();
     }

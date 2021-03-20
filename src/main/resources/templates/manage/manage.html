@@ -9,36 +9,14 @@
     <link th:href="@{../css/manage.css}" rel="stylesheet">
     <link th:href="@{../css/base.css}" rel="stylesheet">
     <div class="main">
-        <form th:action="@{/ManagementScreen/search}" th:object="${searchForm}" method=post>
+        <form th:action="@{/timecard-input/init}" method=get>
             <div class="searchpanel">
                 <div class="searchpanel-contents">
-                    <label>年</label>
-                    <select th:field="*{selectYear}">
-                        <option value=""></option>
-                        <option th:each="year : ${yearsList}" th:value="${year}" th:text="${year}"></option>
-                    </select>
+                    <label>ユーザーID</label>
+                    <input type="text" name="userId" />
                 </div>
                 <div class="searchpanel-contents">
-                    <label>月</label>
-                    <select th:field="*{selectMonth}">
-                        <option value=""></option>
-                        <option th:each="month : ${T(java.time.Month).values()}" th:value="${month}" th:text="${month.value}"></option>
-                    </select>
-                </div>
-                <div class="searchpanel-contents">
-                    <label>承認ステータス</label>
-                    <select th:field="*{approvalStatus}">
-                        <option value=""></option>
-                        <option th:each="status : ${T(com.tcm.enums.ApprovalStatus).values()}"
-                                th:value="${status.key}" th:text="${status.name}"></option>
-                    </select>
-                </div>
-                <div class="searchpanel-contents">
-                    <label>名前</label>
-                    <input type="text" th:field="*{name}" />
-                </div>
-                <div class="searchpanel-contents">
-                    <button type="submit">検索</button>
+                    <button type="submit">参照</button>
                 </div>
             </div>
         </form>

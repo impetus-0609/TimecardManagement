@@ -138,6 +138,10 @@ public class TimecardInputController {
 		}
 		form.setTimecardInputDtoList(result);
 
+		// 承認ステータスコード取得
+		String cd = mapper.getApprovalStatusCd(id);
+		form.setApprovalStatusCd(cd);
+
 		// 勤怠表選択プルダウンの設定
 		List<KeyValueDto> selectKintaiPulldownDtoList = new ArrayList<KeyValueDto>();
 		List<String> kintaiList = mapper.selectWorkDayList(id);

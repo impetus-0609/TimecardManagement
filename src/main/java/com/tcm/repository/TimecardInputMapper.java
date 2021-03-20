@@ -21,6 +21,13 @@ public interface TimecardInputMapper {
 	List<TimecardInputSqlDto> select(@Param("id") String id, @Param("targetMonth") String targetMonth);
 
 	/**
+	 * 承認ステータス取得
+	 * @return
+	 */
+	@Select("select approval_status_cd from approval where user_id = #{id}")
+	String getApprovalStatusCd(@Param("id") String id);
+
+	/**
 	 * 勤怠選択プルダウン値取得
 	 * @param id ユーザID
 	 * @return 勤怠情報年月リスト

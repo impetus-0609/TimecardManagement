@@ -1,5 +1,7 @@
 package com.tcm.controller.manage;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,7 @@ public class ManageController {
     public ModelAndView search(SearchForm form, ModelAndView mv) {
 
         SearchDto dto = manageHelper.mappingSearchDto(form);
+        List<SearchResultDto> aaa = searchService.search(dto);
 
         mv.addObject("searchResultList",searchService.search(dto));
         mv.addObject("yearsList",manageHelper.getIntYearsList(2));

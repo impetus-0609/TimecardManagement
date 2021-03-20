@@ -16,7 +16,7 @@ public class SearchService {
     private ManageRepository manageRepository;
 
     public List<SearchResultDto> search(SearchDto dto) {
-        return manageRepository.searchManage(dto);
+        return manageRepository.searchUserList(dto);
     }
 
 }

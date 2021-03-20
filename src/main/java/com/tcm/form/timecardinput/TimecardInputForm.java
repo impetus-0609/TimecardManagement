@@ -20,6 +20,7 @@ public class TimecardInputForm {
     private String modalDateTo;
     private String modalWorkDayId;
     private String modalUserId;
+    private String approvalStatusCd;
 
 	/** 勤怠情報. */
 	private List<TimecardInputDto> timecardInputDtoList;

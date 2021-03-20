@@ -1,7 +1,5 @@
 package com.tcm.dto.manage;
 
-import java.time.Month;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,8 +9,7 @@ import lombok.Setter;
 @Builder
 public class SearchDto {
 
-    private String selectYear;
-    private Month selectMonth;
+    private String selectYearMonth;
     private String name;
     private String approvalStatus;
 

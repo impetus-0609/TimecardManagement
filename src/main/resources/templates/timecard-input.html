@@ -16,7 +16,7 @@
     <h1>勤怠入力画面</h1>
     <form th:action="@{/timecard-input}" method="post">
       <div th:object="${timecardInputData}">
-      <p>インピタス五郎</p>
+      <!--  <p th:object="${#authentication.principal.userAccount}" th:text="|*{id} さん |"></p>-->
 	  <select id="selectKintai">
 	    <option th:each="item : *{selectKintaiPulldownDtoList}" th:value="${item.key}">[[${item.value}]]</option>
 	  </select>
@@ -29,20 +29,18 @@
 	            <td>
 	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInputGozen(this.id);"
 	                th:field="*{timecardInputDtoList[__${stat.index}__].gozen}" th:data-nen="${item.nen}"
-	                th:data-day="${item.hizuke}" th:data-youbi="${item.youbi}" th:data-workdayid="${item.workDayId}" th:data-ymd="${item.ymd}" readonly>
+	                th:data-day="${item.hizuke}" th:data-youbi="${item.youbi}" th:data-workdayid="${item.workDayId}" th:data-ymd="${item.ymd}"
+	                th:disabled="${(approvalStatusCd eq '01')? 'readonly':'disabled'}">
 	              <span>&nbsp;～</span>
 	            </td>
 	            <td>
 	              <input type="text" size="5" style="cursor:pointer;" onclick="javascript:clickInputGogo(this.id);"
-	                th:field="*{timecardInputDtoList[__${stat.index}__].gogo}" readonly>
+	                th:field="*{timecardInputDtoList[__${stat.index}__].gogo}"
+	                th:disabled="${(approvalStatusCd eq '01')? 'readonly':'disabled'}">
 	            </td>
 	          </tr>
           </th:block>
         </table>
-      </div>
-      <div class="btn">
-      <button>キャンセル</button>
-      <input type="submit" value="送信">
       </div>
     </form>
     <form id="selectKintaiForm" th:action="@{/timecard-input/init}" method="get">
