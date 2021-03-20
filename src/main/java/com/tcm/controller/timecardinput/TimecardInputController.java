@@ -5,11 +5,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +27,7 @@ import com.tcm.dto.timecardinput.ApprovalDto;
 import com.tcm.dto.timecardinput.KeyValueDto;
 import com.tcm.dto.timecardinput.TimecardInputSqlDto;
 import com.tcm.entity.Users;
+import com.tcm.enums.Role;
 import com.tcm.form.timecardinput.ApprovalForm;
 import com.tcm.form.timecardinput.TimecardInputDto;
 import com.tcm.form.timecardinput.TimecardInputForm;
@@ -81,8 +85,21 @@ public class TimecardInputController {
 	    }
 	    UserAccount userAccount = userModel.getUserAccount();
 
+
 		String targetYearMonth = Objects.nonNull(yearMonth) ? yearMonth : getNowYm();
 		String targetUserId = Objects.nonNull(userId) ? userId : userAccount.getId();
+
+		Collection<? extends GrantedAuthority> authorities = userModel.getAuthorities();
+		List<Role> roles = authorities.stream()
+				.map(role -> Role.valueOf(role.getAuthority()))
+				.collect(Collectors.toList());
+		if (roles.contains(Role.ROLE_USE)) {
+			if (!targetUserId.equals(userAccount.getId())) {
+				ModelAndView r = new ModelAndView();
+				r.setViewName("error-page");
+				return r;
+			}
+		}
 
 		TimecardInputForm form = getInitData(targetYearMonth, targetUserId);
 
@@ -100,8 +117,11 @@ public class TimecardInputController {
     public ModelAndView approval(ApprovalForm form, ModelAndView mv) {
         ApprovalDto dto = timecardInputHelper.mappingApprovalDto(form);
         approvalService.approval(dto);
-        mv.setViewName("redirect:" + ACTION_PATH_INIT);
-        return mv;
+		String param = "?yearMonth=";
+		param += form.getYearMonth();
+		param += "&userId=";
+		param += form.getUserId();
+		return new ModelAndView("redirect:" + ACTION_PATH_INIT + param);
     }
 
 	/**
@@ -139,15 +159,18 @@ public class TimecardInputController {
 		form.setTimecardInputDtoList(result);
 
 		// 承認ステータスコード取得
-		String cd = mapper.getApprovalStatusCd(id);
+		String cd = mapper.getApprovalStatusCd(id, targetMonth);
 		form.setApprovalStatusCd(cd);
+
+		// 対象年月取得
+		form.setYearMonth(targetMonth);
 
 		// 勤怠表選択プルダウンの設定
 		List<KeyValueDto> selectKintaiPulldownDtoList = new ArrayList<KeyValueDto>();
 		List<String> kintaiList = mapper.selectWorkDayList(id);
 		for (String month : kintaiList) {
 			KeyValueDto dto = new KeyValueDto();
-			dto.setKey(month);
+			dto.setKey(month.replace("-", ""));
 			dto.setValue(month);
 			selectKintaiPulldownDtoList.add(dto);
 		}

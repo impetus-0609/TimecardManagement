@@ -24,8 +24,8 @@ public interface TimecardInputMapper {
 	 * 承認ステータス取得
 	 * @return
 	 */
-	@Select("select approval_status_cd from approval where user_id = #{id}")
-	String getApprovalStatusCd(@Param("id") String id);
+	@Select("select approval_status_cd from approval where user_id = #{id} and year_month = #{year_month}")
+	String getApprovalStatusCd(@Param("id") String id, @Param("year_month") String year_month);
 
 	/**
 	 * 勤怠選択プルダウン値取得
@@ -35,7 +35,8 @@ public interface TimecardInputMapper {
 	@Select("SELECT to_char(work_day, 'YYYY-MM') AS Month"
 			+ " FROM work_day"
 			+ " WHERE user_id = #{id}"
-			+ " GROUP BY to_char(work_day, 'YYYY-MM')")
+			+ " GROUP BY to_char(work_day, 'YYYY-MM')"
+			+ " ORDER BY to_char(work_day, 'YYYY-MM')")
 	List<String> selectWorkDayList(@Param("id") String id);
 
 	/**

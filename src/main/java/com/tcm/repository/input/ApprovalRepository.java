@@ -23,8 +23,8 @@ public interface ApprovalRepository {
             + "FROM  "
             + "  approval  "
             + "WHERE  "
-            + "  user_id = #{dto.userId}"
-            + "  and year_month = #{dto.yearMonth} ")
+            + "  user_id = #{userId}"
+            + "  and year_month = #{yearMonth} ")
     public Approval findByUserIdAndYearMonth(ApprovalDto dto);
 
     @Insert("INSERT "
@@ -38,24 +38,20 @@ public interface ApprovalRepository {
             + "  , update_date  "
             + ") "
             + "VALUES ("
-            + "  entity.userId "
-            + "  , entity.yearMonth "
-            + "  , entity.approvalStatusCd "
-            + "  , entity.approvalUserId "
-            + "  , entity.approvalDate "
-            + "  , entity.createDate "
-            + "  , entity.updateDate )" )
+            + "  userId "
+            + "  , yearMonth "
+            + "  , approvalStatusCd "
+            + "  , approvalUserId "
+            + "  , approvalDate "
+            + "  , createDate "
+            + "  , updateDate )" )
     public int insert(Approval entity);
 
     @Update("UPDATE approval "
             + "SET  "
-            + "  approval_id = entity.approvalId "
-            + "  , user_id = entity.userId "
-            + "  , year_month = entity.yearMonth "
-            + "  , approval_status_cd = entity.approvalStatusCd "
-            + "  , approval_user_id = entity.approvalUserId "
-            + "  , approval_date = entity.approvalDate "
-            + "  , create_date = entity.createDate "
-            + "  , update_date = entity.updateDate ")
+            + "  approval_status_cd = #{approvalStatusCd} "
+            + "  where"
+            + "  user_id = #{userId} "
+            + "  and year_month = #{yearMonth}")
     public int update(Approval entity);
 }

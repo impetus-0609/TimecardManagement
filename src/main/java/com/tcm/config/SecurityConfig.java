@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.tcm.service.login.LoginService;
 
@@ -26,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin().loginPage("/login").defaultSuccessUrl("/login_success").failureUrl("/login-error").permitAll();
+        http.logout().logoutUrl("/logout").permitAll().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
         http.authorizeRequests().antMatchers("/css/**", "/img/**", "/js/**").permitAll().anyRequest().authenticated();
     }
 

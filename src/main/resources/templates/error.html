@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/templates :: layout(~{::title},~{::body/content()})}">
+  <head>
+  <meta charset="utf-8" />
+    <title>エラー</title>
+  </head>
+  <body>
+    <h1>ページが表示出来ませんでした。</h1>
+    <p>再度ログインからやり直してください。</p>
+    <a href="http://localhost:8080/login">ログインページはこちら</a>
+  </body>
+</html>

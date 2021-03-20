@@ -3,20 +3,19 @@
 	th:replace="~{layout/templates :: layout(~{::title},~{::body/content()})}">
     <head>
         <meta charset="UTF-8">
-        <title>管理画面</title>
+        <title>勤怠連絡システム</title>
     </head>
     <body>
     <link th:href="@{../css/manage.css}" rel="stylesheet">
-    <link th:href="@{../css/base.css}" rel="stylesheet">
     <div class="main">
+    <div class="mt20 mb10">参照したい社員のユーザーIDを入力してください。</div>
         <form th:action="@{/timecard-input/init}" method=get>
             <div class="searchpanel">
                 <div class="searchpanel-contents">
-                    <label>ユーザーID</label>
-                    <input type="text" name="userId" />
+                    <input type="text" name="userId" placeholder="ユーザーID" />
                 </div>
-                <div class="searchpanel-contents">
-                    <button type="submit">参照</button>
+                <div class="searchpanel-contents mb20 t-align-c">
+                    <button class="mt20" type="submit">参照</button>
                 </div>
             </div>
         </form>

@@ -13,12 +13,29 @@
   flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
+  background-color:#e6e6e6;
 }
 
-
+h1 {
+     font-size: 50px;
+     font-weight: bold;
+     color: #006633;
+}
 
 .mt20 {
 	margin-top: 20px;
+}
+
+.mb10 {
+	margin-bottom: 10px;
+}
+
+.mb20 {
+	margin-bottom: 20px;
+}
+
+.t-align-c {
+	text-align: center;
 }
 
 

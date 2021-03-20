@@ -6,7 +6,7 @@
 <body>
     <!--/* (1) */-->
     <div th:fragment="header" th:remove="tag">
-        <p style="text-align: center; background: #e5eCf9;"><a th:href="@{../login}">勤怠システム</a></p>
+        <div style="text-align: left; background: #e5eCf9;">ログインユーザー：<span sec:authentication="principal.username"></span><a style="float: right" th:href="@{/logout}">ログアウト</a></div>
     </div>
 </body>
 </html>

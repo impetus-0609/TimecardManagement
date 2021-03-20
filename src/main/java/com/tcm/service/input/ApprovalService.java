@@ -20,7 +20,7 @@ public class ApprovalService {
         Date now = new Date();
         Approval approval =approvalRepository.findByUserIdAndYearMonth(dto);
         if (approval != null) {
-            updateApproval(approval, now, dto.getStatus());
+            updateApproval(approval, now, ApprovalStatus.Approval);
         } else {
             insertApproval(dto, now);
         }
